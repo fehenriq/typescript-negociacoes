@@ -13,5 +13,17 @@ export class Negociacao {
         const data = new Date(this._data.getTime());
         return this._data;
     }
+
+    /**
+     * It takes a string, replaces all the dashes with commas, and then creates a new Date object with
+     * the result.
+    */
+    public static criaDe(dataString: string, quantidadeString: string, valorString: string): Negociacao {
+        const exp = /-/g;
+        const date = new Date(dataString.replace(exp, ','));
+        const quantidade = parseInt(quantidadeString);
+        const valor = parseFloat(valorString);
+        return new Negociacao(date, quantidade, valor);
+    }
 }
 

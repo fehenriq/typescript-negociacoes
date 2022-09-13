@@ -1,41 +1,40 @@
+import { DiasDaSemana } from "../enums/dias-da-semana.js";
 import { Negociacao } from "../models/negociacao.js";
 import { Negociacoes } from "../models/negociacoes.js";
+import { MensagemView } from "../views/mensagem-view.js";
+import { NegociacoesView } from "../views/negociacoes-views.js";
 export class NegociacaoController {
     constructor() {
         this.negociacoes = new Negociacoes;
+        this.negociacoesView = new NegociacoesView('#negociacoesView', true);
+        this.mensagemView = new MensagemView('#mensagemView');
         this.inputData = document.querySelector('#data');
         this.inputQuantidade = document.querySelector('#quantidade');
         this.inputValor = document.querySelector('#valor');
+        this.negociacoesView.update(this.negociacoes);
     }
-    /**
-     * The function adiciona() is a void function that creates a new negociacao object, adds it to the
-     * negociacoes array, and then clears the form.
-     */
     adiciona() {
-        const negociacao = this.criaNegociacao();
+        const negociacao = Negociacao.criaDe(this.inputData.value, this.inputQuantidade.value, this.inputValor.value);
+        if (!this.diaUtil(negociacao.data)) {
+            this.mensagemView.update('Apenas negociações em dias úteis são aceitas');
+            return;
+        }
         this.negociacoes.adiciona(negociacao);
-        console.log(this.negociacoes.lista());
         this.limpaFormulario();
+        this.atualizaView();
     }
-    /**
-     * The function criaNegociacao() returns a new Negociacao object, which is created by passing the
-     * values of the inputData, inputQuantidade and inputValor properties to the Negociacao
-     * constructor.
-     */
-    criaNegociacao() {
-        const exp = /-/g;
-        const date = new Date(this.inputData.value.replace(exp, ','));
-        const quantidade = parseInt(this.inputQuantidade.value);
-        const valor = parseFloat(this.inputValor.value);
-        return new Negociacao(date, quantidade, valor);
-    }
-    /**
-     * This function clears the form fields.
-     */
     limpaFormulario() {
         this.inputData.value = '';
         this.inputQuantidade.value = '';
         this.inputValor.value = '';
         this.inputData.focus();
+    }
+    atualizaView() {
+        this.negociacoesView.update(this.negociacoes);
+        this.mensagemView.update('Negociação adicionada com sucesso!');
+    }
+    diaUtil(data) {
+        return data.getDay() > DiasDaSemana.domingo
+            && data.getDay() < DiasDaSemana.sabado;
     }
 }
