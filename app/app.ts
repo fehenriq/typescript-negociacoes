@@ -10,4 +10,3 @@ if (form) {
 } else {
     throw Error('Não foi posssível inicializar a aplicação. Verifique se o form existe.')
 }
-

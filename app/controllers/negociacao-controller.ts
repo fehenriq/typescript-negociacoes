@@ -63,4 +63,3 @@ export class NegociacaoController {
             && data.getDay() < DiasDaSemana.sabado;
     }
 }
-
