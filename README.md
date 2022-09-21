@@ -1,6 +1,6 @@
 # Negociações com Typescript
 
-Formulário simples validade com Typescript
+Formulário simples com validações em Typescript
 
 ## 🔨 Funcionalidades do projeto
 
